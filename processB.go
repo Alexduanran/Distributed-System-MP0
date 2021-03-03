@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"net"
-
-	"github.com/Alexduanran/MP0/email"
+	"github.com/Alexduanran/MP0/msg"
 	"github.com/Alexduanran/MP0/tcp"
+	"net"
 )
 
 func main() {
@@ -13,7 +12,7 @@ func main() {
 	tcp.Server("8888", handleConnection)
 }
 
-// handleConnection prints out email received from client
+// handleConnection prints out msg received from client
 // server stops listening and closes when listen is set to false
 func handleConnection(conn net.Conn, listen *bool) {
 	// closing connection
@@ -22,13 +21,13 @@ func handleConnection(conn net.Conn, listen *bool) {
 		fmt.Println("Connection closed")
 	}()
 
-	// receive new email from the client
-	newEmail := new(email.Email)
-	tcp.Decode(conn, newEmail)
-	newEmail.Print()
+	// receive new msg from the client
+	newMsg := msg.Msg{}
+	tcp.Decode(conn, &newMsg)
+	newMsg.Email.Print()
 
 	// send ACK message to client
-	tcp.Encode(conn, "STOP")
+	tcp.Encode(conn, msg.Msg{ACK: 1})
 	fmt.Println("ACK sent")
 
 	*listen = false // closing the server

@@ -1,4 +1,4 @@
-package email
+package msg
 
 import (
 	"bufio"
@@ -7,12 +7,17 @@ import (
 	"time"
 )
 
+type Msg struct {
+	Email Email
+	ACK int
+}
+
 type Email struct {
 	To, From, Date, Title, Content string
 }
 
 // Compose returns a new Email struct filled with user input data
-func Compose() Email {
+func ComposeEmail() Email {
 	email := new(Email)
 
 	fmt.Println("Compose New Message:")
@@ -39,7 +44,7 @@ func Compose() Email {
 	return *email
 }
 
-// Print prints email to the console
+// Print prints msg to the console
 func (email Email) Print() {
 	fmt.Println("--------- New mail --------- ")
 	fmt.Println("To:", email.To)
